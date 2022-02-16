@@ -44,13 +44,30 @@ public:
     TritSet operator&(const TritSet& set);
     TritSet operator|(const TritSet& set);
     TritSet operator~();
+
+    class iterator{
+    private:
+        cellTritSet* cell_set;
+
+    public:
+        iterator(const cellTritSet& set);
+        void operator++();
+        bool operator!=(TritSet::iterator it);
+        bool operator==(Trit set);
+        iterator operator=(Trit set);
+        iterator operator=(TritSet::iterator set);
+    };
+
+    iterator begin();
+    iterator end();
 };
+
 
 class cellTritSet {
 private:
     TritSet* trit_set;
     unsigned int index;
-
+friend class TritSet::iterator;
 public:
     cellTritSet(TritSet* set, unsigned int index);
 

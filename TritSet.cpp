@@ -175,6 +175,49 @@ TritSet TritSet::operator~() {
     return new_set;
 }
 
+TritSet::iterator::iterator(const cellTritSet& set) {
+    *cell_set = set;
+}
+
+TritSet::iterator TritSet::iterator::operator=(TritSet::iterator set){
+    TritSet::iterator it(*(set.cell_set));
+    return it;
+}
+
+void TritSet::iterator::operator++() {
+    cell_set->index += 1;
+}
+
+bool  TritSet::iterator::operator!=(TritSet::iterator it){
+    if(*(this->cell_set) == *(it.cell_set))
+        return false;
+    else
+        return true;
+}
+
+bool TritSet::iterator::operator==(Trit set){
+if(*(this->cell_set) == set)
+    return true;
+else
+    return false;
+}
+
+TritSet::iterator TritSet::iterator::operator=(Trit set){
+    *(this->cell_set) = set;
+    return *this;
+}
+
+TritSet::iterator TritSet::begin() {
+    cellTritSet begin(this,0);
+    TritSet::iterator it(begin);
+    return it ;
+}
+
+TritSet::iterator TritSet::end() {
+    cellTritSet begin(this,this->capacity);
+    return {begin} ;
+}
+
 cellTritSet::cellTritSet(TritSet* set, unsigned int index) {
     trit_set = set;
     this->index = index;
