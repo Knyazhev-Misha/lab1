@@ -175,47 +175,67 @@ TritSet TritSet::operator~() {
     return new_set;
 }
 
-TritSet::iterator::iterator(const cellTritSet& set) {
-    *cell_set = set;
+bool TritSet::operator==(const TritSet& set) const {
+    if (this->capacity == set.capacity){
+        for (int i = 0; i < this->capacity; i += 1)
+            if (!((*this)[i] == set[i]))
+                return false;
+    }
+    else
+       return false;
+
+    return true;
 }
 
-TritSet::iterator TritSet::iterator::operator=(TritSet::iterator set){
-    TritSet::iterator it(*(set.cell_set));
+TritSet::iterator::iterator(TritSet* trit_set, unsigned int index) {
+    this->trit_set = trit_set;
+    this->index = index;
+}
+
+TritSet::iterator TritSet::iterator::operator=(iterator set){
+    TritSet::iterator it(set.trit_set, set.index);
+
     return it;
 }
 
-void TritSet::iterator::operator++() {
-    cell_set->index += 1;
+void TritSet::iterator::operator++(int) {
+    index += 1;
 }
 
-bool  TritSet::iterator::operator!=(TritSet::iterator it){
-    if(*(this->cell_set) == *(it.cell_set))
+void TritSet::iterator::operator++(){
+    index += 1;
+}
+
+bool  TritSet::iterator::operator!=(iterator it){
+   if(this->trit_set == it.trit_set && this->index == it.index)
         return false;
     else
         return true;
 }
 
 bool TritSet::iterator::operator==(Trit set){
-if(*(this->cell_set) == set)
-    return true;
-else
-    return false;
+    cellTritSet proxy(this->trit_set, index);
+
+    if(proxy == set)
+       return true;
+    else
+       return false;
 }
 
 TritSet::iterator TritSet::iterator::operator=(Trit set){
-    *(this->cell_set) = set;
+    cellTritSet proxy(this->trit_set, index);
+    proxy = set;
     return *this;
 }
 
 TritSet::iterator TritSet::begin() {
-    cellTritSet begin(this,0);
-    TritSet::iterator it(begin);
-    return it ;
+    TritSet::iterator it(this, 0);
+    return it;
 }
 
 TritSet::iterator TritSet::end() {
-    cellTritSet begin(this,this->capacity);
-    return {begin} ;
+    TritSet::iterator it(this, this->capacity);
+    return it ;
 }
 
 cellTritSet::cellTritSet(TritSet* set, unsigned int index) {
@@ -223,6 +243,10 @@ cellTritSet::cellTritSet(TritSet* set, unsigned int index) {
     this->index = index;
 }
 
+cellTritSet::cellTritSet() {
+    trit_set = NULL;
+    this->index = 0;
+}
 
 cellTritSet cellTritSet::operator=(Trit value) {
     unsigned int qt_uint = index / (4 * sizeof(unsigned int));

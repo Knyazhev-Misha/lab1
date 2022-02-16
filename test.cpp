@@ -178,3 +178,33 @@ TEST(TEST, TritSet_not){
         ASSERT_EQ(check[i], tritset1[i]);
     }
 }
+
+TEST(TEST, TritSet_compare_operator){
+    TritSet tritset1(500), tritset2(500);
+
+    ASSERT_EQ(tritset1, tritset2);
+}
+
+TEST(TEST, TritSet_iterator){
+    TritSet tritset(1000);
+
+    for(int i = 0; i < 1000; i += 1) {
+        ASSERT_EQ(tritset[i], UNKNOWN);
+    }
+
+    for(auto it : tritset){
+       *it = TRUE;
+    }
+
+    for(int i = 0; i < 1000; i += 1){
+        ASSERT_EQ(tritset[i], TRUE);
+    }
+
+    for(auto it : tritset){
+        *it = FALSE;
+    }
+
+    for(int i = 0; i < 1000; i += 1){
+        ASSERT_EQ(tritset[i], FALSE);
+    }
+}
