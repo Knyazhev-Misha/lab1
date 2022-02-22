@@ -175,27 +175,23 @@ TritSet TritSet::operator~() {
     return new_set;
 }
 
-bool TritSet::operator==(const TritSet& set) const {
-    if (this->capacity == set.capacity){
-        for (int i = 0; i < this->capacity; i += 1)
-            if (!((*this)[i] == set[i]))
-                return false;
-    }
-    else
-       return false;
-
-    return true;
-}
-
 TritSet::iterator::iterator(TritSet* trit_set, unsigned int index) {
     this->trit_set = trit_set;
     this->index = index;
 }
 
-TritSet::iterator TritSet::iterator::operator=(iterator set){
-    TritSet::iterator it(set.trit_set, set.index);
+TritSet::iterator TritSet::iterator::operator*() const{
+    return *this;
+}
 
-    return it;
+cellTritSet TritSet::iterator::operator*(){
+    return (*trit_set)[index];
+}
+
+TritSet::iterator TritSet::iterator::operator=(const iterator& set){
+    this->index = set.index;
+    this->trit_set = set.trit_set;
+    return *this;
 }
 
 void TritSet::iterator::operator++(int) {
@@ -206,25 +202,29 @@ void TritSet::iterator::operator++(){
     index += 1;
 }
 
-bool  TritSet::iterator::operator!=(iterator it){
-   if(this->trit_set == it.trit_set && this->index == it.index)
+bool  TritSet::iterator::operator!=(const iterator& it) const{
+    if(this->trit_set == it.trit_set && this->index == it.index)
         return false;
     else
         return true;
 }
 
-bool TritSet::iterator::operator==(Trit set){
-    cellTritSet proxy(this->trit_set, index);
+bool  TritSet::iterator::operator==(const iterator& it) const{
+    if(this->trit_set == it.trit_set && this->index == it.index)
+        return true;
+    else
+        return false;
+}
 
-    if(proxy == set)
+bool TritSet::iterator::operator==(const Trit& set) const{
+    if((*trit_set)[index] == set)
        return true;
     else
        return false;
 }
 
-TritSet::iterator TritSet::iterator::operator=(Trit set){
-    cellTritSet proxy(this->trit_set, index);
-    proxy = set;
+TritSet::iterator TritSet::iterator::operator=(const Trit& set) {
+    (*trit_set)[index] = set;
     return *this;
 }
 

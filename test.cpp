@@ -179,10 +179,21 @@ TEST(TEST, TritSet_not){
     }
 }
 
-TEST(TEST, TritSet_compare_operator){
-    TritSet tritset1(500), tritset2(500);
+TEST(TEST, TritSet_iterator_notequal) {
+    TritSet tritset1(1000);
+    TritSet tritset2(1000);
 
-    ASSERT_EQ(tritset1, tritset2);
+    auto it1 = tritset1.begin();
+    auto it2 = tritset2.begin();
+
+    ASSERT_NE(it1, it2);
+
+    it2 = tritset1.begin();
+    ASSERT_EQ(it1, it2);
+
+    it2 = tritset1.end();
+
+    ASSERT_NE(it1, it2);
 }
 
 TEST(TEST, TritSet_iterator){
@@ -193,7 +204,7 @@ TEST(TEST, TritSet_iterator){
     }
 
     for(auto it : tritset){
-       *it = TRUE;
+       it = TRUE;
     }
 
     for(int i = 0; i < 1000; i += 1){
@@ -201,10 +212,38 @@ TEST(TEST, TritSet_iterator){
     }
 
     for(auto it : tritset){
-        *it = FALSE;
+        it = FALSE;
     }
 
     for(int i = 0; i < 1000; i += 1){
         ASSERT_EQ(tritset[i], FALSE);
     }
+}
+
+TEST(TEST, TritSet_iterator_other_capacity_memory){
+    TritSet tritset(1000);
+    size_t qt = tritset.get_capacity();
+    ASSERT_EQ(qt, 1000);
+
+    auto it = tritset.end();
+    it++;
+    it++;
+    it = TRUE;
+    qt = tritset.get_capacity();
+    ASSERT_EQ(qt, 1003);
+    ASSERT_EQ(tritset[1002], TRUE);
+}
+
+TEST(TEST, TritSet_iterator_other_capacity_withoutmemory){
+    TritSet tritset(1000);
+    size_t qt = tritset.get_capacity();
+    ASSERT_EQ(qt, 1000);
+
+    auto it = tritset.end();
+    it++;
+    it++;
+    it = UNKNOWN;
+    qt = tritset.get_capacity();
+    ASSERT_EQ(qt, 1000);
+    ASSERT_EQ(tritset[1002], UNKNOWN);
 }

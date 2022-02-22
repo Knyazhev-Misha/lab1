@@ -44,7 +44,6 @@ public:
     TritSet operator&(const TritSet& set);
     TritSet operator|(const TritSet& set);
     TritSet operator~();
-    bool operator==(const TritSet& set) const;
     class iterator{
     private:
         TritSet* trit_set;
@@ -54,11 +53,15 @@ public:
         iterator(TritSet* trit_set, unsigned int index);
         void operator++(int);
         void operator++();
-        iterator* operator*(){return this;}
-        bool operator!=(iterator it);
-        bool operator==(Trit set);
-        iterator operator=(Trit set);
-        iterator operator=(iterator set);
+
+        iterator operator*()  const;
+        cellTritSet operator*();
+
+        bool operator!=(const iterator& it) const;
+        bool operator==(const iterator& it) const;
+        bool operator==(const Trit& set) const;
+        iterator operator=(const Trit& set);
+        iterator operator=(const iterator& set);
     };
 
     iterator begin();
